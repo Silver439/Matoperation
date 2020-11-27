@@ -1,6 +1,6 @@
-#ifndef _MATOPERATION_H
+#ifndef MATOPERATION_H_
 
-#define _MATOPERATION_H
+#define MATOPERATION_H_
 
 #include<iostream>
 #include<vector>
