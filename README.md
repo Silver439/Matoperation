@@ -6,6 +6,7 @@ Assignment4
 
 * 定义了矩阵类，成员变量包含矩阵的行数，列数，以及数据。
 * 重载定义了+，-，*，=，<<运算符，其中 ” *“定义了三种重载，即A * B, a *B，A * b（小写代表标量）。
+* 能够判断运算是否合理，并且能够指出不合理运算的错误所在。
 * 向函数传递矩阵类参数是全部使用引用传递，尽可能减小内存消耗。
 * 通过使用vector，利用OpenCV的CV_XADD函数的思路，实现了内存维护功能，避免了因多个指针指向同一地址的内存块导致的delete时出现的程序崩溃问题。
 * 将程序通过arm板成功运行。
@@ -159,63 +160,105 @@ Assignment4
 
 * **各类符号的重载函数**：
 
+  1.**等号**：进行了内存管理操作，判断是否需要释放被赋值的矩阵类的内存。
+
 ```c++
 matrix& matrix::operator=(const matrix& B)
 {
+	if (row * col != 0) {
+		if (check2()) {
+			cout << row << "," << col << ":" << "Done!" << endl;
+			delete[] data;
+		}
+		else {
+			cout << row << "," << col << ":" << "Wait!" << endl;
+		}
+	}
 	row = B.row;
 	col = B.col;
 	data = B.data;
 	check1();
 	return *this;
 }
+```
 
+​      **2.  加减号**：能够判断两个矩阵是否能进行加减操作，若不能则会报错。
+
+```c++
 matrix matrix::operator+(const matrix& B)
 {
-	int m = row;
-	int n = B.col;
-	matrix C(m, n);
-	for (int i = 0; i < m; i++)
-	{
-		for (int j = 0; j < n; j++)
+	if (row == B.row && col == B.col) {
+		int m = row;
+		int n = B.col;
+		matrix C(m, n);
+		for (int i = 0; i < m; i++)
 		{
-			C.data[i][j] = data[i][j] + B.data[i][j];
-		}
-	}
-	return C;
-}
-
-matrix matrix::operator-(const matrix& B)
-{
-	int m = row;
-	int n = B.col;
-	matrix C(m, n);
-	for (int i = 0; i < m; i++)
-	{
-		for (int j = 0; j < n; j++)
-		{
-			C.data[i][j] = data[i][j] - B.data[i][j];
-		}
-	}
-	return C;
-}
-
-matrix matrix::operator*(const matrix &B)
-{
-	matrix C(row, B.col);
-	for (int i = 0; i < row; i++)
-	{
-		for (int k = 0; k < col; k++)
-		{
-			float v = data[i][k];
-			for (int j = 0; j < B.col; j++)
+			for (int j = 0; j < n; j++)
 			{
-				C.data[i][j]+= v * B.data[k][j];
+				C.data[i][j] = data[i][j] + B.data[i][j];
 			}
 		}
+		return C;
 	}
-	return C;
+	else {
+		cout << "You can't add two matrix with different size!";
+		return *this;
+	}
 }
+matrix matrix::operator-(const matrix& B)
+{
+	if (row == B.row && col == B.col) {
+		int m = row;
+		int n = B.col;
+		matrix C(m, n);
+		for (int i = 0; i < m; i++)
+		{
+			for (int j = 0; j < n; j++)
+			{
+				C.data[i][j] = data[i][j] - B.data[i][j];
+			}
+		}
+		return C;
+	}
+	else {
+		cout << "You can't minus two matrix with different size!";
+		return *this;
+	}
+}
+```
 
+​		**3.矩阵相乘**：能够判断两个矩阵是否能够相乘，若不能则会报错。
+
+```c++
+matrix matrix::operator*(const matrix &B)
+{
+	if (col == B.row) {
+		matrix C(row, B.col);
+		for (int i = 0; i < row; i++)
+		{
+			for (int k = 0; k < col; k++)
+			{
+				float v = data[i][k];
+				for (int j = 0; j < B.col; j++)
+				{
+					C.data[i][j] += v * B.data[k][j];
+				}
+			}
+		}
+		return C;
+	}
+	else {
+		cout << "Please multiply two matrix that the first matrix's col is equal to the second matrix's row.";
+		return *this;
+	}
+}
+```
+
+这里采取的乘法算法在最简单的算法上做了一点改进，即更改循环次序以增加访存的连续性。这个代码较为简单，且效率良好。在O3优化的条件下进行两个1000*1000大小的矩阵乘法只需200ms，这个适用范围足够满足一般的运算需求。至于标量与矩阵的乘法较为简单，这里不再赘述。
+
+​		**4.矩阵与标量间的乘法**：分为a * B和A * b两种情况。
+
+```c++
 matrix matrix::operator*(const float& b)
 {
 	matrix C(row, col);
@@ -239,22 +282,7 @@ matrix operator*(const float a, const matrix& B)
 	}
 	return C;
 }
-
-ostream& operator<<(ostream& os,const matrix& B)
-{
-	for (int i = 0; i < B.row; i++)
-	{
-		for (int j = 0; j < B.col; j++)
-		{
-			os << B.data[i][j]<<" ";
-			if (j == B.col - 1) os << endl;
-		}
-	}
-	return os;
-}
 ```
-
-+，-，较为简单，重点说一下矩阵乘法。这里采取的乘法算法在最简单的算法上做了一点改进，即更改循环次序以增加访存的连续性。这个代码较为简单，且效率良好。在O3优化的条件下进行两个1000*1000大小的矩阵乘法只需200ms，这个适用范围足够满足一般的运算需求。至于标量与矩阵的乘法较为简单，这里不再赘述。
 
 * **最后是析构函数**：
 
@@ -274,6 +302,4 @@ matrix::~matrix()
   为了方便显示功能，该函数在调用时若成功释放内存则会输出"Done！"并输出释放内存所对应的矩阵大小。若未释放内存则会输出“Wait”并输出矩阵大小。在接下来的程序展示中可以看到，它能够很好的完成内存管理的任务。
 
 ### 三：程序展示：
-
-
 
