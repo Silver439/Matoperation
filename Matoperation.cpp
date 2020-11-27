@@ -1,7 +1,9 @@
 #include"Matoperation.h";
 using namespace std;
-vector<int> address;
-vector<int> counter;
+
+static vector<int> address;
+static vector<int> counter;
+
 void matrix::init()
 {
 	data = new float*[row];
@@ -42,7 +44,6 @@ bool matrix::check2()
 			break;
 		}
 	}
-	cout << row << "," << col << ":" << counter[i]<<endl;
 	if (counter[i] == 1) {
 		return 1;
 	}
@@ -54,7 +55,6 @@ bool matrix::check2()
 
 matrix::matrix(const matrix& B)
 {
-	cout << row << " " << col << endl;
 	row = B.row;
 	col = B.col;
 	data = B.data;
@@ -70,10 +70,22 @@ matrix::matrix(int m, int n)
 
 matrix::matrix(int m, int n,float** element)
 {
+	bool b = 0;
+	for (int i = 0; i < address.size(); i++)
+	{
+		if ((int)&(element[0][0]) == address[i]) {
+			counter[i] += 1;
+			b = 1;
+			break;
+		}
+	}
+	if (b == 0) {
+		address.push_back((int)&(element[0][0]));
+		counter.push_back(2);
+	}
 	row = m;
 	col = n;
 	data = element;
-	check1();
 }
 
 
@@ -85,6 +97,7 @@ matrix& matrix::operator=(const matrix& B)
 	check1();
 	return *this;
 }
+
 matrix matrix::operator+(const matrix& B)
 {
 	int m = row;
@@ -113,6 +126,7 @@ matrix matrix::operator-(const matrix& B)
 	}
 	return C;
 }
+
 matrix matrix::operator*(const matrix &B)
 {
 	matrix C(row, B.col);
@@ -160,7 +174,7 @@ ostream& operator<<(ostream& os,const matrix& B)
 	{
 		for (int j = 0; j < B.col; j++)
 		{
-			os << B.data[i][j];
+			os << B.data[i][j]<<" ";
 			if (j == B.col - 1) os << endl;
 		}
 	}
