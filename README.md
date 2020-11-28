@@ -377,7 +377,7 @@ matrix::~matrix()
   然后将这些数组的数据传递到矩阵中：
 
   ```c++
-      matrix A(2, 3, p1);
+        matrix A(2, 3, p1);
   	matrix B(2, 3, p2);
   	matrix C(3, 4, p3);
   ```
@@ -385,7 +385,7 @@ matrix::~matrix()
   **开始测试各个运算符功能**：（同时演示了<<重载后的功能）
 
   ```c++
-      cout << "A+B: " << endl;
+        cout << "A+B: " << endl;
   	cout << A + B << endl;
   	cout << endl;
   	cout << "A-B: " << endl;
@@ -403,7 +403,7 @@ matrix::~matrix()
 可以看到结果均正确，且内存均被正确释放。特别的，由于动态申请的二维数组的内存由析构函数释放，所以在delete这些指针之前需要先将它们转化为空指针，具体如下：
 
 ```c++
-    p1 = NULL;
+        p1 = NULL;
 	p2 = NULL;
 	p3 = NULL;
 	delete[] p1;
@@ -418,7 +418,7 @@ matrix::~matrix()
 * 至此我们已经展示了所有被重载过的运算符。对于它们我们还可以**做更为复杂的符合运算**，例如：
 
   ```c++
-      float a, b;
+        float a, b;
   	a = 2.1f;
   	b = 3.2f;
   
