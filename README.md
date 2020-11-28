@@ -398,7 +398,7 @@ matrix::~matrix()
 
   输出结果：
 
-  <img src="https://github.com/Silver439/Matoperation/blob/main/picture/Screenshot%202020-11-28%20101413.png;" />
+  ![Screenshot 2020-11-28 101413](https://github.com/Silver439/Matoperation/blob/main/picture/Screenshot%202020-11-28%20101413.png)
 
 可以看到结果均正确，且内存均被正确释放。特别的，由于动态申请的二维数组的内存由析构函数释放，所以在delete这些指针之前需要先将它们转化为空指针，具体如下：
 
@@ -435,7 +435,7 @@ matrix::~matrix()
 
   这段代码**还展示了矩阵与标量相乘的两种*的重载方法**。运行结果如下：
 
-  <img src="https://github.com/Silver439/Matoperation/blob/main/picture/Screenshot%202020-11-28%20102256.png;" />
+ ![Screenshot 2020-11-28 102256](https://github.com/Silver439/Matoperation/blob/main/picture/Screenshot%202020-11-28%20102256.png)
 
   结果均正确，且内存均被正确释放。
 
