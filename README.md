@@ -445,17 +445,16 @@ matrix::~matrix()
 
 * 首先写cmakelist文件后用cmake指令生成makefile，如图：
 
-  <img src="https://github.com/Silver439/Matoperation/blob/main/picture/2020-11-28-112344_1024x600_scrot.png;" />
+ ![2020-11-28-112344_1024x600_scrot](https://github.com/Silver439/Matoperation/blob/main/picture/2020-11-28-112344_1024x600_scrot.png)
 
 * 再用make指令生成可执行程序文件Mat：
 
-  <img src="https://github.com/Silver439/Matoperation/blob/main/picture/2020-11-28-112536_1024x600_scrot.png;" />
+  ![2020-11-28-112536_1024x600_scrot](https://github.com/Silver439/Matoperation/blob/main/picture/2020-11-28-112536_1024x600_scrot.png)
 
 * 执行可执行程序Mat，运行结果如图：
 
-  <img src="https://github.com/Silver439/Matoperation/blob/main/picture/2020-11-28-112822_1024x600_scrot.png;" />
-
-  <img src="https://github.com/Silver439/Matoperation/blob/main/picture/2020-11-28-112848_1024x600_scrot.png;" />
+  ![2020-11-28-112822_1024x600_scrot](https://github.com/Silver439/Matoperation/blob/main/picture/2020-11-28-112822_1024x600_scrot.png)
+  ![2020-11-28-112848_1024x600_scrot](https://github.com/Silver439/Matoperation/blob/main/picture/2020-11-28-112848_1024x600_scrot.png)
 
   与windows下运行结果完全相同。
 
