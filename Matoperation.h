@@ -10,9 +10,9 @@ private:
 	int row=0;
 	int col=0;
 	float** data;
+	void init();
 	void check1();
 	bool check2();
-	void init();
 public:
 	matrix(const matrix& B);
 	matrix(int m, int n);

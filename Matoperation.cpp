@@ -18,40 +18,40 @@ void matrix::init()
 	}
 }
 
-void matrix:: check1()
-{
-	bool b = 0;
-	for (int i = 0; i < address.size(); i++)
+	void matrix:: check1()
 	{
-		if ((int)&(data[0][0]) == address[i]) {
-			counter[i] += 1;
-			b = 1;
-			break;
+		bool b = 0;
+		for (int i = 0; i < address.size(); i++)
+		{
+			if ((int)&(data[0][0]) == address[i]) {
+				counter[i] += 1;
+				b = 1;
+				break;
+			}
+		}
+		if (b == 0) {
+			address.push_back((int)&(data[0][0]));
+			counter.push_back(1);
 		}
 	}
-	if (b == 0) {
-		address.push_back((int)&(data[0][0]));
-		counter.push_back(1);
-	}
-}
 
-bool matrix::check2()
-{
-	int i;
-	for (i = 0; i < address.size(); i++)
+	bool matrix::check2()
 	{
-		if ((int)&(data[0][0]) == address[i]) {
-			break;
+		int i;
+		for (i = 0; i < address.size(); i++)
+		{
+			if ((int)&(data[0][0]) == address[i]) {
+				break;
+			}
+		}
+		if (counter[i] == 1) {
+			return 1;
+		}
+		else {
+			counter[i] -= 1;
+			return 0;
 		}
 	}
-	if (counter[i] == 1) {
-		return 1;
-	}
-	else {
-		counter[i] -= 1;
-		return 0;
-	}
-}
 
 matrix::matrix(const matrix& B)
 {
@@ -81,7 +81,7 @@ matrix::matrix(int m, int n,float** element)
 	}
 	if (b == 0) {
 		address.push_back((int)&(element[0][0]));
-		counter.push_back(2);
+		counter.push_back(1);
 	}
 	row = m;
 	col = n;
@@ -91,6 +91,15 @@ matrix::matrix(int m, int n,float** element)
 
 matrix& matrix::operator=(const matrix& B)
 {
+	if (row * col != 0) {
+		if (check2()) {
+			cout << row << "," << col << ":" << "Done!" << endl;
+			delete[] data;
+		}
+		else {
+			cout << row << "," << col << ":" << "Wait!" << endl;
+		}
+	}
 	row = B.row;
 	col = B.col;
 	data = B.data;
@@ -100,48 +109,66 @@ matrix& matrix::operator=(const matrix& B)
 
 matrix matrix::operator+(const matrix& B)
 {
-	int m = row;
-	int n = B.col;
-	matrix C(m, n);
-	for (int i = 0; i < m; i++)
-	{
-		for (int j = 0; j < n; j++)
+	if (row == B.row && col == B.col) {
+		int m = row;
+		int n = B.col;
+		matrix C(m, n);
+		for (int i = 0; i < m; i++)
 		{
-			C.data[i][j] = data[i][j] + B.data[i][j];
+			for (int j = 0; j < n; j++)
+			{
+				C.data[i][j] = data[i][j] + B.data[i][j];
+			}
 		}
+		return C;
 	}
-	return C;
+	else {
+		cout << "You can't add two matrix with different size!";
+		return *this;
+	}
 }
 matrix matrix::operator-(const matrix& B)
 {
-	int m = row;
-	int n = B.col;
-	matrix C(m, n);
-	for (int i = 0; i < m; i++)
-	{
-		for (int j = 0; j < n; j++)
+	if (row == B.row && col == B.col) {
+		int m = row;
+		int n = B.col;
+		matrix C(m, n);
+		for (int i = 0; i < m; i++)
 		{
-			C.data[i][j] = data[i][j] - B.data[i][j];
+			for (int j = 0; j < n; j++)
+			{
+				C.data[i][j] = data[i][j] - B.data[i][j];
+			}
 		}
+		return C;
 	}
-	return C;
+	else {
+		cout << "You can't minus two matrix with different size!";
+		return *this;
+	}
 }
 
 matrix matrix::operator*(const matrix &B)
 {
-	matrix C(row, B.col);
-	for (int i = 0; i < row; i++)
-	{
-		for (int k = 0; k < col; k++)
+	if (col == B.row) {
+		matrix C(row, B.col);
+		for (int i = 0; i < row; i++)
 		{
-			float v = data[i][k];
-			for (int j = 0; j < B.col; j++)
+			for (int k = 0; k < col; k++)
 			{
-				C.data[i][j]+= v * B.data[k][j];
+				float v = data[i][k];
+				for (int j = 0; j < B.col; j++)
+				{
+					C.data[i][j] += v * B.data[k][j];
+				}
 			}
 		}
+		return C;
 	}
-	return C;
+	else {
+		cout << "Please multiply two matrix that the first matrix's col is equal to the second matrix's row.";
+		return *this;
+	}
 }
 
 matrix matrix::operator*(const float& b)

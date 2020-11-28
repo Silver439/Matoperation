@@ -1,0 +1,3 @@
+/home/pi/Matoperation/build/CMakeFiles/rebuild_cache.dir
+/home/pi/Matoperation/build/CMakeFiles/Mat.dir
+/home/pi/Matoperation/build/CMakeFiles/edit_cache.dir
