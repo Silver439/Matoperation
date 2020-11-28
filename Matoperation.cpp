@@ -81,7 +81,6 @@ matrix::matrix(int m, int n,float** element)
 	}
 	if (b == 0) {
 		address.push_back((int)&(element[0][0]));
-		cout<<address.size()<<endl;
 		counter.push_back(1);
 	}
 	row = m;
