@@ -1,0 +1,22 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/pi/Matoperation/Matoperation.h
+iostream
+-
+vector
+-
+
+/home/pi/Matoperation/main.cpp
+Matoperation.h
+/home/pi/Matoperation/Matoperation.h
+
+/home/pi/Matoperation/matoperation.cpp
+Matoperation.h
+/home/pi/Matoperation/Matoperation.h
+
