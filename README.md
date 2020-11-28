@@ -150,7 +150,7 @@ Assignment4
   	}
   	if (b == 0) {
   		address.push_back((int)&(element[0][0]));
-  		counter.push_back(2);
+  		counter.push_back(1);
   	}
   	row = m;
   	col = n;
@@ -303,3 +303,163 @@ matrix::~matrix()
 
 ### 三：程序展示：
 
+* **首先先简单的检测一下内存管理机制**：
+
+  在main函数写下如下代码：
+
+  ```c++
+  int main()
+  {
+  	matrix A(2, 2);
+  	matrix B(2, 2);
+  	A = B;
+  }
+  ```
+
+  运行结果：
+
+  ![Screenshot 2020-11-27 113035](E:\Matoperation\picture\Screenshot 2020-11-27 113035.png)
+
+  可以看到A,B的内存均被正确释放，由于存在两个指针指向B所对应的内存块，所以该内存释放时先“wait”再释放。
+
+* **再看一个较复杂的情况**：
+
+  ```c++
+  int main()
+  {
+  	matrix A(2, 2);
+  	matrix B(2, 2);
+  	matrix C(A);
+  	A = B;
+  	B = C;
+  }
+  ```
+
+  运行结果：
+
+  ![Screenshot 2020-11-27 113754](E:\Matoperation\picture\Screenshot 2020-11-27 113754.png)
+
+  这里进行了更多更为复杂的赋值构造操作，可以看到最终内存依旧被正确释放。
+
+* **接下来测试一些运算符**：（简单起见，将所有矩阵的元素都设置为1）
+
+  首先创建3个二维动态数组，元素全部初始化为1:
+
+  ```c++
+  	float** p1;
+  	float** p2;
+  	float** p3;
+  	p1 = new float* [2];
+  	p2 = new float* [2];
+  	p3 = new float* [3];
+  	for (int i = 0; i < 2; i++) {
+  		p1[i] = new float[3];
+  		p2[i] = new float[3];
+  	}
+  	for (int i = 0; i < 3; i++) {
+  		p3[i] = new float[4];
+  	}
+  	for(int i=0;i<2;i++)
+  	{
+  		for (int j = 0; j < 3; j++) {
+  			p1[i][j] = 1;
+  			p2[i][j] = 1;
+  		}
+  	}
+  	for (int i = 0; i < 3; i++)
+  	{
+  		for (int j = 0; j < 4; j++) {
+  			p3[i][j] = 1;
+  		}
+  	}
+  ```
+
+  然后将这些数组的数据传递到矩阵中：
+
+  ```c++
+      matrix A(2, 3, p1);
+  	matrix B(2, 3, p2);
+  	matrix C(3, 4, p3);
+  ```
+
+  **开始测试各个运算符功能**：（同时演示了<<重载后的功能）
+
+  ```c++
+      cout << "A+B: " << endl;
+  	cout << A + B << endl;
+  	cout << endl;
+  	cout << "A-B: " << endl;
+  	cout << A - B << endl;
+  	cout << endl;
+  	cout << "A*C: " << endl;
+  	cout << A*C << endl;
+  	cout << endl;
+  ```
+
+  输出结果：
+
+  <img src="E:\Matoperation\picture\Screenshot 2020-11-28 101413.png" alt="Screenshot 2020-11-28 101413" style="zoom:75%;" />
+
+可以看到结果均正确，且内存均被正确释放。特别的，由于动态申请的二维数组的内存由析构函数释放，所以在delete这些指针之前需要先将它们转化为空指针，具体如下：
+
+```c++
+    p1 = NULL;
+	p2 = NULL;
+	p3 = NULL;
+	delete[] p1;
+	delete[] p2;
+	delete[] p3;
+
+	return 0;
+```
+
+这样便可避免程序崩溃。
+
+* 至此我们已经展示了所有被重载过的运算符。对于它们我们还可以**做更为复杂的符合运算**，例如：
+
+  ```c++
+      float a, b;
+  	a = 2.1f;
+  	b = 3.2f;
+  
+  	cout << "a*B-A " << endl;
+  	cout << a * B - A << endl;
+  	cout << endl;
+  	cout << "(A*b)*C " << endl;
+  	cout << (A * b)* C << endl;
+  	cout << endl;
+  	cout << "(A+B)*C: " << endl;
+  	cout << (A + B) * C << endl;
+  	cout << endl;
+  ```
+
+  这段代码**还展示了矩阵与标量相乘的两种*的重载方法**。运行结果如下：
+
+  <img src="E:\Matoperation\picture\Screenshot 2020-11-28 102256.png" alt="Screenshot 2020-11-28 102256" style="zoom:75%;" />
+
+  结果均正确，且内存均被正确释放。
+
+* 以上是程序展示部分。接下来我会将该代码用arm板运行。
+
+### 四：Arm板运行测试：
+
+* 首先写cmakelist文件后用cmake指令生成makefile，如图：
+
+  <img src="E:\Matoperation\picture\2020-11-28-112344_1024x600_scrot.png" alt="2020-11-28-112344_1024x600_scrot" style="zoom:60%;" />
+
+* 再用make指令生成可执行程序文件Mat：
+
+  <img src="E:\Matoperation\picture\2020-11-28-112536_1024x600_scrot.png" alt="2020-11-28-112536_1024x600_scrot" style="zoom:60%;" />
+
+* 执行可执行程序Mat，运行结果如图：
+
+  <img src="E:\Matoperation\picture\2020-11-28-112822_1024x600_scrot.png" alt="2020-11-28-112822_1024x600_scrot" style="zoom:60%;" />
+
+  <img src="E:\Matoperation\picture\2020-11-28-112848_1024x600_scrot.png" alt="2020-11-28-112848_1024x600_scrot" style="zoom:60%;" />
+
+  与windows下运行结果完全相同。
+
+### 五.总结：
+
+* 以上便是本次报告的全部内容。个人认为本次作业最大的难点在于内存管理，解决了内存的释放问题后，其他的任务都显得较为轻松。由于代码文件较少，所以用cmake管理代码显得并不必要，因此我目前对cmake的理解与运用还处在较为粗浅的阶段，今后需要进一步深入学习。
+* **感谢阅读！**
