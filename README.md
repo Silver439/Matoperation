@@ -318,7 +318,7 @@ matrix::~matrix()
 
   运行结果：
 
-  ![Screenshot 2020-11-27 113035](E:\Matoperation\picture\Screenshot 2020-11-27 113035.png)
+  ![Screenshot 2020-11-27 113035](https://github.com/Silver439/Matoperation/blob/main/picture/Screenshot%202020-11-27%20113035.png)
 
   可以看到A,B的内存均被正确释放，由于存在两个指针指向B所对应的内存块，所以该内存释放时先“wait”再释放。
 
@@ -337,7 +337,7 @@ matrix::~matrix()
 
   运行结果：
 
-  ![Screenshot 2020-11-27 113754](E:\Matoperation\picture\Screenshot 2020-11-27 113754.png)
+  ![Screenshot 2020-11-27 113754](https://github.com/Silver439/Matoperation/blob/main/picture/Screenshot%202020-11-27%20113754.png)
 
   这里进行了更多更为复杂的赋值构造操作，可以看到最终内存依旧被正确释放。
 
@@ -398,7 +398,7 @@ matrix::~matrix()
 
   输出结果：
 
-  <img src="E:\Matoperation\picture\Screenshot 2020-11-28 101413.png" alt="Screenshot 2020-11-28 101413" style="zoom:75%;" />
+  <img src="https://github.com/Silver439/Matoperation/blob/main/picture/Screenshot%202020-11-28%20101413.png;" />
 
 可以看到结果均正确，且内存均被正确释放。特别的，由于动态申请的二维数组的内存由析构函数释放，所以在delete这些指针之前需要先将它们转化为空指针，具体如下：
 
@@ -435,7 +435,7 @@ matrix::~matrix()
 
   这段代码**还展示了矩阵与标量相乘的两种*的重载方法**。运行结果如下：
 
-  <img src="E:\Matoperation\picture\Screenshot 2020-11-28 102256.png" alt="Screenshot 2020-11-28 102256" style="zoom:75%;" />
+  <img src="https://github.com/Silver439/Matoperation/blob/main/picture/Screenshot%202020-11-28%20102256.png;" />
 
   结果均正确，且内存均被正确释放。
 
@@ -445,17 +445,17 @@ matrix::~matrix()
 
 * 首先写cmakelist文件后用cmake指令生成makefile，如图：
 
-  <img src="E:\Matoperation\picture\2020-11-28-112344_1024x600_scrot.png" alt="2020-11-28-112344_1024x600_scrot" style="zoom:60%;" />
+  <img src="https://github.com/Silver439/Matoperation/blob/main/picture/2020-11-28-112344_1024x600_scrot.png;" />
 
 * 再用make指令生成可执行程序文件Mat：
 
-  <img src="E:\Matoperation\picture\2020-11-28-112536_1024x600_scrot.png" alt="2020-11-28-112536_1024x600_scrot" style="zoom:60%;" />
+  <img src="https://github.com/Silver439/Matoperation/blob/main/picture/2020-11-28-112536_1024x600_scrot.png;" />
 
 * 执行可执行程序Mat，运行结果如图：
 
-  <img src="E:\Matoperation\picture\2020-11-28-112822_1024x600_scrot.png" alt="2020-11-28-112822_1024x600_scrot" style="zoom:60%;" />
+  <img src="https://github.com/Silver439/Matoperation/blob/main/picture/2020-11-28-112822_1024x600_scrot.png;" />
 
-  <img src="E:\Matoperation\picture\2020-11-28-112848_1024x600_scrot.png" alt="2020-11-28-112848_1024x600_scrot" style="zoom:60%;" />
+  <img src="https://github.com/Silver439/Matoperation/blob/main/picture/2020-11-28-112848_1024x600_scrot.png;" />
 
   与windows下运行结果完全相同。
 
